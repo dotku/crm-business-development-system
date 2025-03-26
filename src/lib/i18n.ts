@@ -19,6 +19,15 @@ export const translations = {
     added: 'Added',
     newCompany: 'Add New Company',
     newReferral: 'Add New Referral for',
+    importExport: 'Import/Export',
+    import: 'Import',
+    export: 'Export',
+    importCompanies: 'Import Companies',
+    exportCompanies: 'Export Companies',
+    importReferrals: 'Import Referrals',
+    exportReferrals: 'Export Referrals',
+    deleteReferral: 'Delete Referral',
+    confirmDeleteReferral: 'Are you sure you want to delete this referral?',
     status: {
       new: 'New',
       active: 'Active',
@@ -29,11 +38,14 @@ export const translations = {
     errors: {
       fetchFailed: 'Failed to fetch data',
       addCompanyFailed: 'Failed to add company',
-      addReferralFailed: 'Failed to add referral'
+      addReferralFailed: 'Failed to add referral',
+      deleteFailed: 'Delete failed',
+      importFailed: 'Import failed'
     },
     success: {
       companyAdded: 'Company added successfully',
-      referralAdded: 'Referral added successfully'
+      referralAdded: 'Referral added successfully',
+      referralDeleted: 'Referral deleted successfully'
     }
   },
   zh: {
@@ -52,6 +64,15 @@ export const translations = {
     added: '添加于',
     newCompany: '添加新公司',
     newReferral: '为以下公司添加推荐',
+    importExport: '导入/导出',
+    import: '导入',
+    export: '导出',
+    importCompanies: '导入公司',
+    exportCompanies: '导出公司',
+    importReferrals: '导入推荐',
+    exportReferrals: '导出推荐',
+    deleteReferral: '删除推荐',
+    confirmDeleteReferral: '确定要删除这条推荐吗？',
     status: {
       new: '新建',
       active: '活跃',
@@ -62,11 +83,14 @@ export const translations = {
     errors: {
       fetchFailed: '获取数据失败',
       addCompanyFailed: '添加公司失败',
-      addReferralFailed: '添加推荐失败'
+      addReferralFailed: '添加推荐失败',
+      deleteFailed: '删除失败',
+      importFailed: '导入失败'
     },
     success: {
       companyAdded: '公司添加成功',
-      referralAdded: '推荐添加成功'
+      referralAdded: '推荐添加成功',
+      referralDeleted: '推荐删除成功'
     }
   }
 };

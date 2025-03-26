@@ -1,6 +1,3 @@
-import { toast } from 'react-hot-toast';
-import { translations } from './i18n';
-
 export type Company = {
   id: string;
   name: string;
@@ -78,5 +75,11 @@ export const storage = {
       referrals[index].status = status;
       localStorage.setItem(REFERRALS_KEY, JSON.stringify(referrals));
     }
+  },
+
+  deleteReferral(id: string): void {
+    const referrals = this.getReferrals();
+    const newReferrals = referrals.filter(r => r.id !== id);
+    localStorage.setItem(REFERRALS_KEY, JSON.stringify(newReferrals));
   }
 };
