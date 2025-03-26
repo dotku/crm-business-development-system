@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Languages, Loader2, FileDown } from 'lucide-react';
-import { Toaster, toast } from 'react-hot-toast';
-import { Language, LanguageContext, translations } from './lib/i18n';
-import { storage, type Company, type Referral } from './lib/storage';
-import { CompanyList } from './components/CompanyList';
-import { ReferralList } from './components/ReferralList';
-import { CompanyForm } from './components/CompanyForm';
-import { ReferralForm } from './components/ReferralForm';
-import { ImportExportModal } from './components/ImportExportModal';
+import React, { useState, useEffect } from "react";
+import { Plus, Languages, Loader2, FileDown } from "lucide-react";
+import { Toaster, toast } from "react-hot-toast";
+import { Language, LanguageContext, translations } from "./lib/i18n";
+import { storage, type Company, type Referral } from "./lib/storage";
+import { CompanyList } from "./components/CompanyList";
+import { ReferralList } from "./components/ReferralList";
+import { CompanyForm } from "./components/CompanyForm";
+import { ReferralForm } from "./components/ReferralForm";
+import { ImportExportModal } from "./components/ImportExportModal";
+
+type NestedTranslation = {
+  [key: string]: string | NestedTranslation;
+};
 
 function App() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -17,15 +21,15 @@ function App() {
   const [showNewReferralForm, setShowNewReferralForm] = useState(false);
   const [showImportExport, setShowImportExport] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
-  const [language, setLanguage] = useState<Language>('zh');
+  const [language, setLanguage] = useState<Language>("zh");
 
   const t = (key: string): string => {
-    const keys = key.split('.');
-    let value: any = translations[language];
+    const keys = key.split(".");
+    let value: NestedTranslation | string = translations[language];
     for (const k of keys) {
-      value = value[k];
+      value = (value as NestedTranslation)[k];
     }
-    return value || key;
+    return value as string || key;
   };
 
   useEffect(() => {
@@ -36,8 +40,8 @@ function App() {
     try {
       setCompanies(storage.getCompanies());
       setReferrals(storage.getReferrals());
-    } catch (error) {
-      toast.error(t('errors.fetchFailed'));
+    } catch {
+      toast.error(t("errors.fetchFailed"));
     } finally {
       setLoading(false);
     }
@@ -50,17 +54,17 @@ function App() {
 
     try {
       storage.addCompany({
-        name: formData.get('name') as string,
-        contact_name: formData.get('contact_name') as string,
-        contact_email: formData.get('contact_email') as string,
+        name: formData.get("name") as string,
+        contact_name: formData.get("contact_name") as string,
+        contact_email: formData.get("contact_email") as string,
       });
 
-      toast.success(t('success.companyAdded'));
+      toast.success(t("success.companyAdded"));
       setShowNewCompanyForm(false);
       fetchData();
       form.reset();
-    } catch (error) {
-      toast.error(t('errors.addCompanyFailed'));
+    } catch {
+      toast.error(t("errors.addCompanyFailed"));
     }
   }
 
@@ -72,18 +76,18 @@ function App() {
     try {
       storage.addReferral({
         company_id: selectedCompany?.id as string,
-        referrer_name: formData.get('referrer_name') as string,
-        referrer_email: formData.get('referrer_email') as string,
-        notes: formData.get('notes') as string,
+        referrer_name: formData.get("referrer_name") as string,
+        referrer_email: formData.get("referrer_email") as string,
+        notes: formData.get("notes") as string,
       });
 
-      toast.success(t('success.referralAdded'));
+      toast.success(t("success.referralAdded"));
       setShowNewReferralForm(false);
       setSelectedCompany(null);
       fetchData();
       form.reset();
-    } catch (error) {
-      toast.error(t('errors.addReferralFailed'));
+    } catch {
+      toast.error(t("errors.addReferralFailed"));
     }
   }
 
@@ -99,24 +103,26 @@ function App() {
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
       <div className="min-h-screen bg-gray-50">
         <Toaster position="top-right" />
-        
+
         {/* Header */}
         <header className="bg-white shadow">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('title')}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {t("title")}
+              </h1>
               <div className="flex items-center gap-3 sm:gap-4">
                 <button
                   onClick={() => setShowImportExport(true)}
                   className="p-2.5 rounded-md hover:bg-gray-100 transition-colors"
-                  title={t('importExport')}
+                  title={t("importExport")}
                 >
                   <FileDown className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}
+                  onClick={() => setLanguage(language === "en" ? "zh" : "en")}
                   className="p-2.5 rounded-md hover:bg-gray-100 transition-colors"
-                  title={language === 'zh' ? 'Switch to English' : '切换到中文'}
+                  title={language === "zh" ? "Switch to English" : "切换到中文"}
                 >
                   <Languages className="w-5 h-5" />
                 </button>
@@ -125,7 +131,7 @@ function App() {
                   className="bg-blue-500 text-white px-4 py-2.5 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-colors flex-1 sm:flex-initial justify-center"
                 >
                   <Plus className="w-5 h-5" />
-                  {t('addCompany')}
+                  {t("addCompany")}
                 </button>
               </div>
             </div>
@@ -143,8 +149,8 @@ function App() {
               }}
               t={t}
             />
-            <ReferralList 
-              referrals={referrals} 
+            <ReferralList
+              referrals={referrals}
               t={t}
               onDelete={() => {
                 fetchData();
