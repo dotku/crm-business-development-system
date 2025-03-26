@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Plus, Languages, Loader2, FileDown } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
 import { Language, LanguageContext, translations } from "./lib/i18n";
@@ -23,20 +23,16 @@ function App() {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [language, setLanguage] = useState<Language>("zh");
 
-  const t = (key: string): string => {
+  const t = useCallback((key: string): string => {
     const keys = key.split(".");
     let value: NestedTranslation | string = translations[language];
     for (const k of keys) {
       value = (value as NestedTranslation)[k];
     }
     return value as string || key;
-  };
+  }, [language]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  function fetchData() {
+  const fetchData = useCallback(() => {
     try {
       setCompanies(storage.getCompanies());
       setReferrals(storage.getReferrals());
@@ -45,7 +41,11 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [t]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   function handleNewCompany(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
